@@ -48,6 +48,35 @@ app.get('/event', async (req, res) => {
   res.send(await eventsRes);
 });
 
+app.get('/transform', (req, res) =>
+{
+  userId = CleanParameter(req.query);
+  getErrors(userId, res)
+  
+});
+
+function CleanParameter(_userId)
+{
+  console.log(_userId.userId);
+  _userId = _userId.userId || '';
+  if (typeof _userId === 'string') 
+  {
+    _userId = _userId.replace(/\D/g, ''); // Supprime tout ce qui n'est pas un chiffre
+  }
+
+  return _userId;
+}
+
+function getErrors(userId, res)
+{
+  client.hGet("usersErrors:" + userId, "error").then(function(result){
+    res.send(JSON.parse(result))
+  }).catch(function(err) {
+    res.send(err.message);
+  });
+
+}
+
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
