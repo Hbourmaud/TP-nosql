@@ -17,7 +17,7 @@ const client = redis.createClient(6379);
 })();
 
 app.get('/createEvent', async (req, res) => {
-  if (!isNaN(req.query.duration)) {
+  if (isNaN(req.query.duration)) {
     res.send("invalid duration argument");
 
     return;
@@ -29,17 +29,23 @@ app.get('/createEvent', async (req, res) => {
 });
 
 app.get('/event', async (req, res) => {
-  data = await client.hGetAll(req.query.eventName);
-  timeLeft = await client.ttl(req.query.eventName);
+  if(!req.query.eventName){
+    keys = await client.keys('*');
+  } else {
+    keys = [req.query.eventName];
+  }
 
-if (data != null && timeLeft != -2){
-  res.send({data, timeLeft});
+  eventsRes = [];
 
-  return;
-}
+  eventsRes = Promise.all(keys.map(async key => {
+    data = await client.hGetAll(key);
+    timeLeft = await client.ttl(key);
+    if (data != null && timeLeft != -2){
+      return ({'name': key, data, timeLeft});
+    }
+  }));
 
-res.send(JSON.stringify("No event corresponding"));
-
+  res.send(await eventsRes);
 });
 
 app.listen(3000, () => {
