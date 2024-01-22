@@ -21,12 +21,4 @@ app.get('/users', async (req, res) => {
         })
       res.send
 }
-
 });
-
-
-function createUsers(pName, pUserId, pAge)
-{
-
-  return pUserId
-}
