@@ -1,0 +1,1 @@
+hset userErrors:3 "error" '{"date": "01/02/24", "message": "toto"}'
