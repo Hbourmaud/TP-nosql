@@ -5,6 +5,7 @@ const port = 3000;
 
 const app = express();
 const client = redis.createClient(6379);
+require('./users.js')(app, client);
 
 (async () => {
   client.on('error', (err) => {
