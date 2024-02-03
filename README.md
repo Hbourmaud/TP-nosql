@@ -1,5 +1,12 @@
 # TP-nosql
 
+cd app
+npm run dev
+cd..
+docker compose up
+commande Redis :
+Hset userErrors:1 error '{   "date": "02/05/2024",   "message": "Le joueur n a pas pu se connecter (Connexion)" }'
+
 ## Membres
 
 [Yann FARANT](https://github.com/YFarant22)

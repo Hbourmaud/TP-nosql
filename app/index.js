@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const redis = require('redis');
+const port = 3000;
 
 const app = express();
 const client = redis.createClient(6379);
@@ -30,7 +31,7 @@ app.get('/createEvent', async (req, res) => {
 
 app.get('/event', async (req, res) => {
   if(!req.query.eventName){
-    keys = await client.keys('*');
+    keys = await client.keys('event*');
   } else {
     keys = [req.query.eventName];
   }
@@ -48,6 +49,36 @@ app.get('/event', async (req, res) => {
   res.send(await eventsRes);
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.get('/errors', (req, res) =>
+{
+  userId = CleanParameter(req.query);
+  getErrors(userId, res)
+  
+});
+
+function CleanParameter(_userId)
+{
+  _userId = _userId.userId || '';
+  if (typeof _userId === 'string') 
+  {
+    _userId = _userId.replace(/\D/g, ''); // Supprime tout ce qui n'est pas un chiffre
+  }
+  return _userId;
+}
+
+function getErrors(userId, res)
+{
+  console.log(userId);
+  client.hGet("userErrors:" + userId, "error").then(function(result){
+    const parsedResult = JSON.parse(result);
+    const formatedResult = "date: " + parsedResult.date + " | message: " + parsedResult.message;
+    console.log(parsedResult);
+    res.send(formatedResult);
+  }).catch(function(err) {
+    res.send(err.message);
+  });
+}
+
+app.listen(port, () => {
+  console.log('Server is running on port ' + port);
 });
