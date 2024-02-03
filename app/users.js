@@ -25,18 +25,13 @@ app.get('/users', async (req, res) => {
     }).catch(function(err){ res.send(err.message);});
   }
   
-  function cleanParametersUsers(_userid)
+  function cleanParametersUsers(_userId)
   {
-    _userid = _userid.userid || '';
-    if (typeof _userid === 'string')
+    _userId = _userId.userId || '';
+    if (typeof _userId === 'string')
     {
-        _userid = _userid.replace(/\D/g, '')
+      _userId = _userId.replace(/\D/g, '')
     }
-    return _userid;
-  }
-  
-  function ifExist(userId)
-  {
-  client.hGet(user)
+    return _userId;
   }
 }
