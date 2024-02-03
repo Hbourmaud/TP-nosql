@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const redis = require('redis');
-const port = 3001;
+const port = 3000;
 
 const app = express();
 const client = redis.createClient(6379);
@@ -31,7 +31,7 @@ app.get('/createEvent', async (req, res) => {
 
 app.get('/event', async (req, res) => {
   if(!req.query.eventName){
-    keys = await client.keys('*');
+    keys = await client.keys('event*');
   } else {
     keys = [req.query.eventName];
   }
@@ -51,7 +51,6 @@ app.get('/event', async (req, res) => {
 
 app.get('/errors', (req, res) =>
 {
-  //console.log(req.query);
   userId = CleanParameter(req.query);
   getErrors(userId, res)
   
@@ -64,7 +63,6 @@ function CleanParameter(_userId)
   {
     _userId = _userId.replace(/\D/g, ''); // Supprime tout ce qui n'est pas un chiffre
   }
-  //console.log(_userId);
   return _userId;
 }
 
