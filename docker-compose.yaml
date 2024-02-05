@@ -13,12 +13,11 @@ services:
 
   mongodb:
     image: mongo:latest
-    container_name: db_tp
+    container_name: mongo
     ports:
-      - 27018:27017
+      - 27017:27017
     volumes:
-      - data:/data/db
-      - ./mflix:/mflix
+      - ~/mongodb/mongo:/data/db
 volumes:
   data:
       
