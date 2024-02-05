@@ -10,3 +10,14 @@ services:
       - 8001:8001
     volumes:
       - ./redisinsight:/db
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ~/mongodb/mongo:/data/db
+volumes:
+  data:
+      
